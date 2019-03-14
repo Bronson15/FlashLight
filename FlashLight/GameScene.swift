@@ -99,6 +99,12 @@ class GameScene: SKScene {
         
         addChild(correct)
         correct.run(group)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            correct.removeFromParent()
+            self.level += 1
+            self.createLevel()
+        }
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
