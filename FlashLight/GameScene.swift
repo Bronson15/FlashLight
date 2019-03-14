@@ -76,10 +76,29 @@ class GameScene: SKScene {
         guard let tapped = tappedNodes.first else { return }
         
         if tapped.name == "correct" {
-            print("Correct!")
+            correctAnswer(node: tapped)
         } else if tapped.name == "wrong" {
             print("Wrong!")
         }
+    }
+    
+    func correctAnswer(node: SKNode) {
+        let correct = SKSpriteNode(imageNamed: "correct")
+        
+        correct.position = node.position
+        correct.position.y += 40
+        correct.zPosition = 10
+        
+        correct.alpha = 0
+        correct.xScale = 2.0
+        correct.yScale = 2.0
+        
+        let fadeIn = SKAction.fadeIn(withDuration: 0.25)
+        let scaleIn = SKAction.scale(to: 1, duration: 0.25)
+        let group = SKAction.group([fadeIn, scaleIn])
+        
+        addChild(correct)
+        correct.run(group)
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
