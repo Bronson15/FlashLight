@@ -88,7 +88,8 @@ class GameScene: SKScene {
             item.run(SKAction.fadeIn(withDuration: 0.2))
         
             let ourPause = SKAction.wait(forDuration: delay)
-            let sequence = SKAction.sequence([ourPause, change])
+            let beep = SKAction.playSoundFileNamed("beep", waitForCompletion: false)
+            let sequence = SKAction.sequence([ourPause, beep, change])
             item.run(sequence)
             
             delay += 0.5

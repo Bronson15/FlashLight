@@ -20,6 +20,7 @@
 		C370967D223BD97300EF36F4 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C370967C223BD97300EF36F4 /* MainMenu.swift */; };
 		C370967F223BD98C00EF36F4 /* MainMenu.sks in Resources */ = {isa = PBXBuildFile; fileRef = C370967E223BD98C00EF36F4 /* MainMenu.sks */; };
 		C3709681223BDEA900EF36F4 /* cool-vibes.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C3709680223BDEA900EF36F4 /* cool-vibes.mp3 */; };
+		C3B67000223C0878002FE776 /* beep.wav in Resources */ = {isa = PBXBuildFile; fileRef = C3B66FFF223C0878002FE776 /* beep.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		C370967C223BD97300EF36F4 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 		C370967E223BD98C00EF36F4 /* MainMenu.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenu.sks; sourceTree = "<group>"; };
 		C3709680223BDEA900EF36F4 /* cool-vibes.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = "cool-vibes.mp3"; path = "../../Assets/Project2/cool-vibes.mp3"; sourceTree = "<group>"; };
+		C3B66FFF223C0878002FE776 /* beep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = beep.wav; path = ../../Assets/Project2/beep.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 				51C6E4C71F951D59001794D5 /* Main.storyboard */,
 				C3709680223BDEA900EF36F4 /* cool-vibes.mp3 */,
 				C3709674223BD8BE00EF36F4 /* correct-3.wav */,
+				C3B66FFF223C0878002FE776 /* beep.wav */,
 				C3709675223BD8BE00EF36F4 /* lobby-time.mp3 */,
 				C3709676223BD8BE00EF36F4 /* wrong-3.wav */,
 				51C6E4CA1F951D59001794D5 /* Assets.xcassets */,
@@ -145,6 +148,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3B67000223C0878002FE776 /* beep.wav in Resources */,
 				C3709678223BD8BE00EF36F4 /* lobby-time.mp3 in Resources */,
 				51C6E4C91F951D59001794D5 /* Main.storyboard in Resources */,
 				51C6E4C01F951D59001794D5 /* GameScene.sks in Resources */,
