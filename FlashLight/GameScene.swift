@@ -10,17 +10,37 @@ import SpriteKit
 
 @objcMembers
 class GameScene: SKScene {
+    
+    let music = SKAudioNode(fileNamed: "lobby-time")
     var level = 1
+    let scoreLabel = SKLabelNode(fontNamed: "Optima-ExtraBlack")
+    var attempt = 1
+    var score = 0 {
+        didSet {
+            scoreLabel.text = "SCORE: \(score)"
+        }
+    }
     
     override func didMove(to view: SKView) {
         // this method is called when your game scene is ready to run
         let background = SKSpriteNode(imageNamed: "background-metal")
         background.name = "background"
         background.zPosition = -1
-        addChild(background)
         
+        
+        scoreLabel.position = CGPoint(x: -480, y: 310)
+        scoreLabel.horizontalAlignmentMode = .left
+        scoreLabel.zPosition = 10
+        score = 0
+        background.addChild(scoreLabel)
+        
+        background.addChild(music)
+        
+        
+        addChild(background)
         createGrid()
         createLevel()
+        
     }
     
     func createGrid() {
@@ -37,7 +57,7 @@ class GameScene: SKScene {
     }
     
     func createLevel() {
-        var itemsToShow = 4 + level
+        let itemsToShow = 4 + level
         
         let items = children.filter { $0.name != "background" }
         
@@ -78,11 +98,12 @@ class GameScene: SKScene {
         if tapped.name == "correct" {
             correctAnswer(node: tapped)
         } else if tapped.name == "wrong" {
-            print("Wrong!")
+            wrongAnswer(node: tapped)
         }
     }
     
     func correctAnswer(node: SKNode) {
+        run(SKAction.playSoundFileNamed("correct-3", waitForCompletion: false))
         let correct = SKSpriteNode(imageNamed: "correct")
         
         correct.position = node.position
@@ -104,6 +125,38 @@ class GameScene: SKScene {
             correct.removeFromParent()
             self.level += 1
             self.createLevel()
+        }
+        score += 1
+    }
+    
+    func wrongAnswer(node: SKNode) {
+        run(SKAction.playSoundFileNamed("wrong-3", waitForCompletion: false))
+        let wrong = SKSpriteNode(imageNamed: "wrong")
+        
+        wrong.zPosition = 5
+        
+        let fadeIn = SKAction.fadeIn(withDuration: 0.25)
+        let scaleIn = SKAction.scale(to: 1, duration: 0.25)
+        let group = SKAction.group([fadeIn, scaleIn])
+        
+        addChild(wrong)
+        wrong.run(group)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            wrong.removeFromParent()
+            self.level = 1
+            self.createLevel()
+        }
+        score = 0
+        attempt += 1
+        
+        if attempt > 3 {
+            DispatchQueue.main.asyncAfter(deadline: .now()) {
+                if let scene = GameScene(fileNamed: "MainMenu") {
+                    scene.scaleMode = .aspectFill
+                    self.view?.presentScene(scene)
+                }
+            }
         }
     }
 
