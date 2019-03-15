@@ -13,13 +13,17 @@ class GameScene: SKScene {
     
     let music = SKAudioNode(fileNamed: "lobby-time")
     var level = 1
-    let scoreLabel = SKLabelNode(fontNamed: "Optima-ExtraBlack")
     var attempt = 1
+    let scoreLabel = SKLabelNode(fontNamed: "Optima-ExtraBlack")
     var score = 0 {
         didSet {
             scoreLabel.text = "SCORE: \(score)"
         }
     }
+    
+    var startTime = 0.0
+    var timeLabel = SKLabelNode(fontNamed: "Optima-ExtraBlack")
+    var isGameRunning = true
     
     override func didMove(to view: SKView) {
         // this method is called when your game scene is ready to run
@@ -27,6 +31,10 @@ class GameScene: SKScene {
         background.name = "background"
         background.zPosition = -1
         
+        timeLabel.position = CGPoint(x: 480, y: 310)
+        timeLabel.horizontalAlignmentMode = .right
+        timeLabel.zPosition = 10
+        background.addChild(timeLabel)
         
         scoreLabel.position = CGPoint(x: -480, y: 310)
         scoreLabel.horizontalAlignmentMode = .left
@@ -35,7 +43,6 @@ class GameScene: SKScene {
         background.addChild(scoreLabel)
         
         background.addChild(music)
-        
         
         addChild(background)
         createGrid()
@@ -57,7 +64,9 @@ class GameScene: SKScene {
     }
     
     func createLevel() {
-        let itemsToShow = 4 + level
+        isUserInteractionEnabled = true
+        var itemsToShow = 4 + level
+        itemsToShow = min(itemsToShow, 96)
         
         let items = children.filter { $0.name != "background" }
         
@@ -86,10 +95,17 @@ class GameScene: SKScene {
             
             delay += 0.5
         }
+        
+        isGameRunning = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            self.isGameRunning = true
+            self.startTime = 0
+        }
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         // this method is called when the user touches the screen
+        guard isGameRunning else { return }
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
         let tappedNodes = nodes(at: location)
@@ -103,6 +119,7 @@ class GameScene: SKScene {
     }
     
     func correctAnswer(node: SKNode) {
+        isUserInteractionEnabled = false
         run(SKAction.playSoundFileNamed("correct-3", waitForCompletion: false))
         let correct = SKSpriteNode(imageNamed: "correct")
         
@@ -151,7 +168,12 @@ class GameScene: SKScene {
         attempt += 1
         
         if attempt > 3 {
-            DispatchQueue.main.asyncAfter(deadline: .now()) {
+            isGameRunning = false
+            
+            let gameOver = SKSpriteNode(imageNamed: "gameOver")
+            gameOver.zPosition = 100
+            addChild(gameOver)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 if let scene = GameScene(fileNamed: "MainMenu") {
                     scene.scaleMode = .aspectFill
                     self.view?.presentScene(scene)
@@ -166,6 +188,32 @@ class GameScene: SKScene {
 
     override func update(_ currentTime: TimeInterval) {
         // this method is called before each frame is rendered
+        if isGameRunning {
+            if startTime == 0 {
+                startTime = currentTime
+            }
+            
+            let timePassed = currentTime - startTime
+            let remainingTime = Int(ceil(10 - timePassed))
+            timeLabel.text = "TIME: \(remainingTime)"
+            timeLabel.alpha = 1
+            
+            if remainingTime <= 0 {
+                isGameRunning = false
+                
+                let gameOver = SKSpriteNode(imageNamed: "gameOver")
+                gameOver.zPosition = 100
+                addChild(gameOver)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    if let scene = GameScene(fileNamed: "MainMenu") {
+                        scene.scaleMode = .aspectFill
+                        self.view?.presentScene(scene)
+                    }
+                }
+            }
+        } else {
+            timeLabel.alpha = 0
+        }
     }
 }
 

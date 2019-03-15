@@ -15,14 +15,14 @@ class MainMenu: SKScene{
     let subTitleLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-Bold")
     let subTitleLabel2 = SKLabelNode(fontNamed: "AvenirNextCondensed-Bold")
     let subTitleLabel3 = SKLabelNode(fontNamed: "AvenirNextCondensed-Bold")
-    let music = SKAudioNode(fileNamed: "lcool-vibes")
+    let music = SKAudioNode(fileNamed: "cool-vibes")
     
     override func didMove(to view: SKView) {
         // this method is called when your game scene is ready to run
+        addChild(music)
         let background = SKSpriteNode(imageNamed: "background-metal")
         background.zPosition = -1
         addChild(background)
-        addChild(music)
         
         titleLabel.text = "Main Menu"
         titleLabel.fontSize = 75
