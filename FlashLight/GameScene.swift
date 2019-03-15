@@ -17,7 +17,7 @@ class GameScene: SKScene {
     let scoreLabel = SKLabelNode(fontNamed: "Optima-ExtraBlack")
     var score = 0 {
         didSet {
-            scoreLabel.text = "SCORE: \(score)"
+            scoreLabel.text = "LEVEL: \(level)"
         }
     }
     
@@ -77,7 +77,6 @@ class GameScene: SKScene {
         }
         
         shuffled[0].name = "correct"
-        shuffled[0].alpha = 1
         
         let lights = [SKTexture(imageNamed: "green-light"), SKTexture(imageNamed: "red-light")]
         let change = SKAction.animate(with: lights, timePerFrame: 0.2)
@@ -86,14 +85,19 @@ class GameScene: SKScene {
         for i in 1 ..< itemsToShow {
             let item = shuffled[i]
             item.name = "wrong"
-            item.alpha = 1
-            
+            item.run(SKAction.fadeIn(withDuration: 0.2))
+        
             let ourPause = SKAction.wait(forDuration: delay)
-            
             let sequence = SKAction.sequence([ourPause, change])
             item.run(sequence)
             
             delay += 0.5
+        }
+        
+        for i in 0 ..< itemsToShow {
+            let item = shuffled[i]
+            
+            item.run(SKAction.fadeIn(withDuration: 0.5))
         }
         
         isGameRunning = false
